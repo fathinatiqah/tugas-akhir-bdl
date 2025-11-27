@@ -1,0 +1,155 @@
+<!-- views/ProyekViews.php -->
+<h2>Manajemen Data Proyek</h2>
+
+<!-- Form Tambah Proyek Baru -->
+  <h3>Tambah Proyek Baru</h3>
+  <form action="../controller/ProyekController.php?action=create" method="POST">
+    <div style="margin-bottom:10px;">
+      <label for="id_klien">Klien:</label><br>
+      <input type="number" name="id_klien" id="id_klien" placeholder="ID Klien">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label for="id_tim">Tim:</label><br>
+      <input type="number" name="id_tim" id="id_tim" placeholder="ID Tim">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label for="id_status">Status:</label><br>
+      <input type="number" name="id_status" id="id_status" placeholder="ID Status">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label for="nama_proyek">Nama Proyek:</label><br>
+      <input type="text" name="nama_proyek" id="nama_proyek" placeholder="Nama Proyek">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label for="budget">Budget:</label><br>
+      <input type="text" name="budget" id="budget" placeholder="Budget (mis: 1000000.00)">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label for="tanggal_mulai">Tanggal Mulai:</label><br>
+      <input type="date" name="tanggal_mulai" id="tanggal_mulai" style="padding:5px; width: 200px;">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label for="tanggal_selesai">Tanggal Selesai:</label><br>
+      <input type="date" name="tanggal_selesai" id="tanggal_selesai" style="padding:5px; width: 200px;">
+    </div>
+
+    <button type="submit">Simpan Proyek</button>
+  </form>
+<br>
+<hr>
+
+<h3>Daftar Proyek</h3>
+<table border="1" cellpadding="8" cellspacing="0" style="border-collapse">
+  <thead>
+    <tr>
+      <th>ID Proyek</th>
+      <th>Nama Proyek</th>
+      <th>Klien</th>
+      <th>Tim</th>
+      <th>Status</th>
+      <th>Budget</th>
+      <th>Tanggal Mulai</th>
+      <th>Tanggal Selesai</th>
+      <th>Aksi</th>
+    </tr>
+  </thead>
+  <tbody>
+  <?php if ($proyekList && count($proyekList) > 0): ?>
+    <?php foreach ($proyekList as $row): ?>
+      <tr>
+        <td><?= htmlspecialchars($row["id_proyek"]) ?></td>
+        <td><?= htmlspecialchars($row["nama_proyek"]) ?></td>
+        <td><?= htmlspecialchars($row["id_klien"]) ?></td>
+        <td><?= htmlspecialchars($row["id_tim"]) ?></td>
+        <td><?= htmlspecialchars($row["id_status"]) ?></td>
+        <td><?= htmlspecialchars($row["budget"]) ?></td>
+        <td><?= htmlspecialchars($row["tanggal_mulai"]) ?></td>
+        <td><?= htmlspecialchars($row["tanggal_selesai"]) ?></td>
+        <td>
+          <button class="edit-btn" onclick="editProyek(
+            '<?= $row['id_proyek'] ?>',
+            '<?= htmlspecialchars($row['id_klien']) ?>',
+            '<?= htmlspecialchars($row['id_tim']) ?>',
+            '<?= htmlspecialchars($row['id_status']) ?>',
+            '<?= htmlspecialchars($row['nama_proyek']) ?>',
+            '<?= htmlspecialchars($row['budget']) ?>',
+            '<?= htmlspecialchars($row['tanggal_mulai']) ?>',
+            '<?= htmlspecialchars($row['tanggal_selesai']) ?>'
+          )">Edit</button>
+
+          <a href="../controller/ProyekController.php?action=delete&id=<?= $row['id_proyek'] ?>"
+             class="delete-btn"
+             onclick="return confirm('Yakin hapus proyek ini?')">
+             Hapus
+          </a>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+  <?php else: ?>
+    <tr>
+      <td colspan="9" style="text-align:center;">Tidak ada data proyek.</td>
+    </tr>
+  <?php endif; ?>
+  </tbody>
+</table>
+
+<!-- Modal Edit Proyek -->
+<div id="modalEditProyek" class="modal" style="display:none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5);">
+  <div class="modal-content" style="background: #fff; margin: 5% auto; padding: 20px; width: 500px; position: relative;">
+    <span class="close" onclick="hideModalProyek()" style="position: absolute; top: 10px; right: 15px; cursor: pointer;">&times;</span>
+    <h3>Edit Data Proyek</h3>
+
+    <form action="../controller/ProyekController.php?action=update" method="POST">
+      <input type="hidden" name="id_proyek" id="edit_id_proyek">
+
+      <div style="margin-bottom:10px;">
+        <label for="edit_id_klien">Klien:</label><br>
+        <input type="number" name="id_klien" id="edit_id_klien" required style="padding:5px; width: 200px;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="edit_id_tim">Tim:</label><br>
+        <input type="number" name="id_tim" id="edit_id_tim" required style="padding:5px; width: 200px;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="edit_id_status">Status:</label><br>
+        <input type="number" name="id_status" id="edit_id_status" required style="padding:5px; width: 200px;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="edit_nama_proyek">Nama Proyek:</label><br>
+        <input type="text" name="nama_proyek" id="edit_nama_proyek" required style="padding:5px; width: 100%;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="edit_budget">Budget:</label><br>
+        <input type="text" name="budget" id="edit_budget" style="padding:5px; width: 200px;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="edit_tanggal_mulai">Tanggal Mulai:</label><br>
+        <input type="date" name="tanggal_mulai" id="edit_tanggal_mulai" style="padding:5px; width: 200px;">
+      </div>
+      <div style="margin-bottom:10px;">
+        <label for="edit_tanggal_selesai">Tanggal Selesai:</label><br>
+        <input type="date" name="tanggal_selesai" id="edit_tanggal_selesai" style="padding:5px; width: 200px;">
+      </div>
+
+      <button type="submit" style="padding: 5px 10px;">Update Proyek</button>
+    </form>
+  </div>
+</div>
+
+<script>
+function editProyek(id, idKlien, idTim, idStatus, nama, budget, tMulai, tSelesai) {
+  document.getElementById("modalEditProyek").style.display = "block";
+  document.getElementById("edit_id_proyek").value = id;
+  document.getElementById("edit_id_klien").value = idKlien;
+  document.getElementById("edit_id_tim").value = idTim;
+  document.getElementById("edit_id_status").value = idStatus;
+  document.getElementById("edit_nama_proyek").value = nama;
+  document.getElementById("edit_budget").value = budget;
+  document.getElementById("edit_tanggal_mulai").value = tMulai;
+  document.getElementById("edit_tanggal_selesai").value = tSelesai;
+}
+
+function hideModalProyek() {
+  document.getElementById("modalEditProyek").style.display = "none";
+}
+</script>

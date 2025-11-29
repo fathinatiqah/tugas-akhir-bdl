@@ -11,7 +11,7 @@ class TimModel {
 
     // READ
     public function getAllTim() {
-        $query = "SELECT * FROM $this->table_name ORDER BY \"id_tim\" DESC";
+        $query = "SELECT * FROM $this->table_name ORDER BY \"id_tim\" ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;

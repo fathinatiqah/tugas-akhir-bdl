@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 class AnggotaModel {
     private $conn;
@@ -11,7 +11,7 @@ class AnggotaModel {
 
     // READ
     public function getAllAnggota() {
-        $query = "SELECT * FROM $this->table_name ORDER BY \"id_anggota\" DESC";
+        $query = "SELECT * FROM $this->table_name ORDER BY \"id_anggota\" ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;

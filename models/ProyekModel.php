@@ -10,10 +10,19 @@ class ProyekModel {
 
     // READ semua proyek
     public function getAllProyek() {
-        $query = "SELECT * FROM {$this->table_name} ORDER BY id_proyek DESC";
+        $query = "SELECT p.*,
+                         k.nama_klien,
+                         t.nama_tim,
+                         s.nama_status
+                  FROM proyek p
+                  LEFT JOIN klien k ON p.id_klien = k.id_klien
+                  LEFT JOIN tim t ON p.id_tim = t.id_tim
+                  LEFT JOIN status s ON p.id_status = s.id_status
+                  ORDER BY p.id_proyek ASC";
+    
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        return $stmt;  // akan mengembalikan PDOStatement
+        return $stmt;
     }
 
     // READ satu proyek berdasarkan ID
@@ -38,8 +47,16 @@ class ProyekModel {
         $stmt->bindParam(":id_status", $data['id_status'], PDO::PARAM_INT);
         $stmt->bindParam(":nama_proyek", $data['nama_proyek'], PDO::PARAM_STR);
         $stmt->bindParam(":budget", $data['budget']);
-        $stmt->bindParam(":tanggal_mulai", $data['tanggal_mulai']);  // format YYYY-MM-DD
-        $stmt->bindParam(":tanggal_selesai", $data['tanggal_selesai']);  // bisa NULL atau tanggal
+        $tanggal_mulai = !empty($data['tanggal_mulai']) ? $data['tanggal_mulai'] : date("Y-m-d");
+
+        $stmt->bindParam(":tanggal_mulai", $tanggal_mulai);
+
+        // tanggal_selesai
+        if ($data['tanggal_selesai'] === null) {
+            $stmt->bindValue(":tanggal_selesai", null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindValue(":tanggal_selesai", $data['tanggal_selesai']);
+        }
 
         return $stmt->execute();
     }
@@ -64,8 +81,16 @@ class ProyekModel {
         $stmt->bindParam(":id_status", $data['id_status'], PDO::PARAM_INT);
         $stmt->bindParam(":nama_proyek", $data['nama_proyek'], PDO::PARAM_STR);
         $stmt->bindParam(":budget", $data['budget']);
-        $stmt->bindParam(":tanggal_mulai", $data['tanggal_mulai']);
-        $stmt->bindParam(":tanggal_selesai", $data['tanggal_selesai']);
+        $tanggal_mulai = !empty($data['tanggal_mulai']) ? $data['tanggal_mulai'] : date("Y-m-d");
+
+        $stmt->bindParam(":tanggal_mulai", $tanggal_mulai);
+
+        // tanggal_selesai
+        if ($data['tanggal_selesai'] === null) {
+            $stmt->bindValue(":tanggal_selesai", null, PDO::PARAM_NULL);
+        } else {
+            $stmt->bindValue(":tanggal_selesai", $data['tanggal_selesai']);
+        }
 
         return $stmt->execute();
     }
@@ -78,11 +103,50 @@ class ProyekModel {
         return $stmt->execute();
     }
 
-    // READ proyek berdasarkan klien
-    public function getProyekByKlien($id_klien) {
-        $query = "SELECT * FROM {$this->table_name} WHERE id_klien = :id_klien ORDER BY id_proyek";
+    //SEARCH proyek
+    public function searchProyek($keyword) {
+        $sql = "SELECT p.*, k.nama_klien, t.nama_tim, s.nama_status
+                FROM proyek p
+                LEFT JOIN klien k ON p.id_klien = k.id_klien
+                LEFT JOIN tim t ON p.id_tim = t.id_tim
+                LEFT JOIN status s ON p.id_status = s.id_status
+                WHERE p.nama_proyek ILIKE :kw
+                ORDER BY p.id_proyek ASC";
+    
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':kw' => "%$keyword%"]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    // READ PROYEK berdasarkan nama
+    public function readProyek() {
+        $query = "SELECT id_proyek, nama_proyek FROM proyek ORDER BY nama_proyek";
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(":id_klien", $id_klien, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    // Hitung total data proyek
+    public function countProyek() {
+        $sql = "SELECT COUNT(*) AS total FROM proyek";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
+    }
+
+    // Ambil data dengan pagination
+    public function getPaginatedProyek($limit, $offset) {
+        $sql = "SELECT p.*, k.nama_klien, t.nama_tim, s.nama_status
+                FROM proyek p
+                LEFT JOIN klien k ON p.id_klien = k.id_klien
+                LEFT JOIN tim t ON p.id_tim = t.id_tim
+                LEFT JOIN status s ON p.id_status = s.id_status
+                ORDER BY p.id_proyek ASC
+                LIMIT :limit OFFSET :offset";
+
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bindValue(":limit", $limit, PDO::PARAM_INT);
+        $stmt->bindValue(":offset", $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }

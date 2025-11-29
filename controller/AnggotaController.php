@@ -1,4 +1,4 @@
-<?php
+<?php 
 require_once "../config/database.php";
 include "../models/TimModel.php";
 include "../models/AnggotaModel.php";

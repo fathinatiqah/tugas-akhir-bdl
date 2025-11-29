@@ -5,14 +5,27 @@
   <h3>Tambah Tugas Baru</h3>
   <form action="../controller/TugasController.php?action=create" method="POST">
     <div style="margin-bottom:10px;">
-      <label for="id_proyek">ID Proyek:</label><br>
-      <input type="number" name="id_proyek" id="id_proyek" placeholder="ID Proyek">
+      <label for="id_proyek">Pilih Proyek:</label><br>
+      <select name="id_proyek" required>
+      <option value="">-- Pilih Proyek --</option>
+            <?php foreach ($proyekList as $proyek): ?>
+                <option value="<?= $proyek['id_proyek'] ?>">
+                    <?= $proyek['nama_proyek'] ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
 
     <div style="margin-bottom:10px;">
-      <label for="id_status">ID Status:</label><br>
-      <input type="number" name="id_status" id="id_status" placeholder="ID Status">
-      <small style="color:#666; display:block;">(Mis: 1 = open, 2 = on progress, 3 = done — sesuaikan di tabel status)</small>
+      <label for="id_status">Status:</label><br>
+      <select name="id_status" required>
+      <option value="">-- Pilih Status --</option>
+            <?php foreach ($statusList as $status): ?>
+                <option value="<?= $status['id_status'] ?>">
+                    <?= $status['nama_status'] ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
 
     <div style="margin-bottom:10px;">
@@ -28,7 +41,7 @@
     <div style="margin-bottom:10px;">
       <label for="tanggal_mulai">Tanggal Mulai:</label><br>
       <input type="date" name="tanggal_mulai" id="tanggal_mulai" style="padding:5px; width: 200px;">
-      <small style="color:#666; display:block;">(Biarkan kosong untuk gunakan tanggal sekarang — DEFAULT CURRENT_DATE di DB)</small>
+      <small style="color:#666; display:block;">(Biarkan kosong untuk gunakan tanggal sekarang — DEFAULT CURRENT_DATE)</small>
     </div>
 
     <div style="margin-bottom:10px;">
@@ -52,7 +65,7 @@
   <input 
       type="text" 
       name="keyword" 
-      placeholder="Cari tugas berdasarkan nama atau ID Proyek..." 
+      placeholder="Cari ID Proyek, Nama, Status" 
       style="padding: 7px; width: 300px;"
       value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>"
   >
@@ -63,11 +76,13 @@
      Reset
   </a>
 </form>
+
+
 <h3>Daftar Tugas</h3>
 <table border="1" cellpadding="8" cellspacing="0">
   <thead>
     <tr>
-      <th>ID Tugas</th>
+      <th>ID</th>
       <th>ID Proyek</th>
       <th>Nama Tugas</th>
       <th>Status</th>
@@ -85,20 +100,20 @@
         <td><?= htmlspecialchars($row["id_tugas"]) ?></td>
         <td><?= htmlspecialchars($row["id_proyek"]) ?></td>
         <td><?= htmlspecialchars($row["nama_tugas"]) ?></td>
-        <td><?= htmlspecialchars($row["id_status"]) ?></td>
+        <td><?= htmlspecialchars($row["nama_status"]) ?></td>
         <td style="max-width:300px; white-space:pre-wrap;"><?= htmlspecialchars($row["deskripsi"]) ?></td>
         <td><?= htmlspecialchars($row["tanggal_mulai"]) ?></td>
-        <td><?= htmlspecialchars($row["batas_waktu"]) ?></td>
+        <td><?= htmlspecialchars($row["batas_waktu"] ?? '') ?></td>
         <td><?= htmlspecialchars($row['tanggal_selesai_actual'] ?? '') ?></td>
         <td>
           <button class="edit-btn" onclick="editTugas(
             '<?= $row['id_tugas'] ?>',
             '<?= htmlspecialchars($row['id_proyek']) ?>',
-            '<?= htmlspecialchars($row['id_status']) ?>',
+            '<?= htmlspecialchars($row['nama_status']) ?>',
             '<?= htmlspecialchars(addslashes($row['nama_tugas'])) ?>',
             '<?= htmlspecialchars(addslashes($row['deskripsi'])) ?>',
             '<?= htmlspecialchars($row['tanggal_mulai']) ?>',
-            '<?= htmlspecialchars($row['batas_waktu']) ?>',
+            '<?= htmlspecialchars($row['batas_waktu'] ?? '') ?>',
             '<?= htmlspecialchars($row['tanggal_selesai_actual'] ?? '') ?>'
           )">Edit</button>
 
@@ -131,8 +146,14 @@
       </div>
 
       <div style="margin-bottom:10px;">
-        <label for="edit_id_status">ID Status:</label><br>
-        <input type="number" name="id_status" id="edit_id_status" required style="padding:5px; width: 200px;">
+        <label for="edit_id_status">Status:</label><br>
+        <select name="id_status" id="edit_id_status" required>
+            <?php foreach ($statusList as $status): ?>
+                <option value="<?= $status['id_status'] ?>">
+                    <?= $status['nama_status'] ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
       </div>
 
       <div style="margin-bottom:10px;">

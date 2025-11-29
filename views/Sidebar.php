@@ -27,14 +27,16 @@
     <header class="header">
       <div class="actions">
         <button class="btn btn-primary" onclick="window.location.href='../controller/ViewController.php'">View</button>
-        <button class="btn btn-secondary">Import Data</button>
+        <button class="btn btn-secondary"onclick="window.location.href='../controller/TransactionController.php'">Transaction Demo</button>
     </header>
 
     <main class="main">
-      <?php 
-        if (isset($page_content) && file_exists($page_content)) {
-            include $page_content;
-        }
-    ?>
-    </main>
+            <div class="content-wrapper">
+                <?php 
+                    if (isset($page_content) && file_exists($page_content)) {
+                        include $page_content;
+                    }
+                ?>
+            </div>
+        </main>
   </div>

@@ -1,10 +1,14 @@
 <?php
 require_once "../config/database.php";
+include "../models/ProyekModel.php";
+include "../models/StatusModel.php";
 include "../models/TugasModel.php";
 
 $database = new Database();
 $db = $database->getConnection();
 
+$proyek = new ProyekModel($db);
+$status = new StatusModel($db);
 $tugas = new TugasModel($db);
 
 $action = $_GET['action'] ?? 'read';  // default tampilan utama
@@ -19,22 +23,36 @@ switch ($action) {
         exit;
 
     case "create":
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+
+            if (empty($_POST['tanggal_mulai'])) {
+                $_POST['tanggal_mulai'] = date("Y-m-d");
+            }
+        
+            if (empty($_POST['tanggal_selesai'])) {
+                $_POST['tanggal_selesai'] = null;
+            }
+        
             $tugas->createTugas($_POST);
-            // arahkan kembali ke daftar tugas
-            header("Location: TugasController.php?action=read");
+            header("Location: TugasController.php");
             exit;
         }
         break;
 
     case "update":
-        if ($_SERVER["REQUEST_METHOD"] == "POST") {
-            // pastikan field id_tugas dikirim lewat form
-            $id = $_POST['id_tugas'] ?? null;
-            if ($id) {
-                $tugas->updateTugas((int)$id, $_POST);
+        if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_tugas'])) {
+
+            // Jika tanggal_mulai kosong → set ke tanggal hari ini
+            if (empty($_POST['tanggal_mulai'])) {
+                $_POST['tanggal_mulai'] = date("Y-m-d");
             }
-            header("Location: TugasController.php?action=read");
+    
+            if (empty($_POST['tanggal_selesai'])) {
+                $_POST['tanggal_selesai'] = null; 
+            }
+    
+            $tugas->updateTugas($_POST['id_tugas'], $_POST);
+            header("Location: TugasController.php");
             exit;
         }
         break;
@@ -49,7 +67,9 @@ switch ($action) {
 
     case "search":
         $keyword = $_GET['keyword'] ?? '';
-        $tugasList = $tugas->searchTugas($keyword)->fetchAll(PDO::FETCH_ASSOC);
+        $proyekList = $proyek->readProyek();
+        $statusList = $status->readStatus();
+        $tugasList = $tugas->searchTugas($keyword);
     
         $page_content = "../views/TugasViews.php";
         include "../views/Layout.php";
@@ -57,7 +77,8 @@ switch ($action) {
 
     case "read":
     default:
-        // sekarang getAllTugas() mengembalikan array
+        $proyekList = $proyek->readProyek();
+        $statusList = $status->readStatus();
         $tugasList = $tugas->getAllTugas();
 
         $page_content = "../views/TugasViews.php";

@@ -11,7 +11,7 @@ class KlienModel {
 
     // READ
     public function getAllKlien() {
-        $query = "SELECT * FROM $this->table_name ORDER BY \"id_klien\" DESC";
+        $query = "SELECT * FROM $this->table_name ORDER BY \"id_klien\" ASC";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
         return $stmt;
@@ -42,6 +42,14 @@ class KlienModel {
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(":id", $id);
         return $stmt->execute();
+    }
+
+    // READ KLIEN berdasarkan nama
+    public function readKlien() {
+        $query = "SELECT id_klien, nama_klien FROM klien ORDER BY nama_klien";
+        $stmt = $this->conn->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

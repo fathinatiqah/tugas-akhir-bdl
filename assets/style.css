@@ -26,7 +26,7 @@ form input {
 
 button {
     padding: 10px 20px;
-    background: #f700ff;
+    background: #0e81c9;
     color: white;
     border: none;
     border-radius: 4px;
@@ -34,7 +34,7 @@ button {
 }
 
 button:hover {
-    background: #0056b3;
+    background: #053f7c;
 }
 
 table {
@@ -92,7 +92,7 @@ table th {
     margin-right: 5px;
 }
 .edit-btn {
-    background: #f700ff;
+    background: #0e81c9;
 }
 
 .delete-btn {

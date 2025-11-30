@@ -1,5 +1,4 @@
 <?php
-
 class TimModel {
     private $conn;
     private $table_name = "tim";

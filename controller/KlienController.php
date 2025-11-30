@@ -7,7 +7,7 @@ $db = $database->getConnection();
 
 $klien = new KlienModel($db);
 
-$action = $_GET['action'] ?? 'read';  // default tampilan utama
+$action = $_GET['action'] ?? 'read';
 
 switch ($action) {
 

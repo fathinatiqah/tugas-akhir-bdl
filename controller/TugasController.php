@@ -16,7 +16,6 @@ $action = $_GET['action'] ?? 'read';  // default tampilan utama
 switch ($action) {
 
     case "get":
-        // return JSON array
         $data = $tugas->getAllTugas();
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($data);
@@ -29,8 +28,8 @@ switch ($action) {
                 $_POST['tanggal_mulai'] = date("Y-m-d");
             }
         
-            if (empty($_POST['tanggal_selesai'])) {
-                $_POST['tanggal_selesai'] = null;
+            if (!empty($_POST['tanggal_selesai_actual'])) {
+                $_POST['id_status'] = 2;
             }
         
             $tugas->createTugas($_POST);
@@ -42,13 +41,12 @@ switch ($action) {
     case "update":
         if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['id_tugas'])) {
 
-            // Jika tanggal_mulai kosong → set ke tanggal hari ini
             if (empty($_POST['tanggal_mulai'])) {
                 $_POST['tanggal_mulai'] = date("Y-m-d");
             }
     
-            if (empty($_POST['tanggal_selesai'])) {
-                $_POST['tanggal_selesai'] = null; 
+            if (!empty($_POST['tanggal_selesai_actual'])) {
+                $_POST['id_status'] = 2;
             }
     
             $tugas->updateTugas($_POST['id_tugas'], $_POST);

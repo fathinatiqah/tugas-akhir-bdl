@@ -1,5 +1,4 @@
 <?php
-
 class ProyekModel {
     private $conn;
     private $table_name = "proyek";
@@ -8,7 +7,7 @@ class ProyekModel {
         $this->conn = $db;
     }
 
-    // READ semua proyek
+    // READ
     public function getAllProyek() {
         $query = "SELECT p.*,
                          k.nama_klien,
@@ -34,7 +33,7 @@ class ProyekModel {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    // CREATE proyek baru
+    // CREATE
     public function createProyek($data) {
         $query = "INSERT INTO {$this->table_name} 
             (id_klien, id_tim, id_status, nama_proyek, budget, tanggal_mulai, tanggal_selesai)
@@ -51,7 +50,6 @@ class ProyekModel {
 
         $stmt->bindParam(":tanggal_mulai", $tanggal_mulai);
 
-        // tanggal_selesai
         if ($data['tanggal_selesai'] === null) {
             $stmt->bindValue(":tanggal_selesai", null, PDO::PARAM_NULL);
         } else {
@@ -61,7 +59,7 @@ class ProyekModel {
         return $stmt->execute();
     }
 
-    // UPDATE proyek
+    // UPDATE
     public function updateProyek($id, $data) {
         $query = "UPDATE {$this->table_name} SET
             id_klien = :id_klien,
@@ -85,7 +83,6 @@ class ProyekModel {
 
         $stmt->bindParam(":tanggal_mulai", $tanggal_mulai);
 
-        // tanggal_selesai
         if ($data['tanggal_selesai'] === null) {
             $stmt->bindValue(":tanggal_selesai", null, PDO::PARAM_NULL);
         } else {
@@ -95,7 +92,7 @@ class ProyekModel {
         return $stmt->execute();
     }
 
-    // DELETE proyek
+    // DELETE
     public function deleteProyek($id) {
         $query = "DELETE FROM {$this->table_name} WHERE id_proyek = :id";
         $stmt = $this->conn->prepare($query);
@@ -103,7 +100,7 @@ class ProyekModel {
         return $stmt->execute();
     }
 
-    //SEARCH proyek
+    //SEARCH
     public function searchProyek($keyword) {
         $sql = "SELECT p.*, k.nama_klien, t.nama_tim, s.nama_status
                 FROM proyek p
@@ -126,7 +123,7 @@ class ProyekModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    // Hitung total data proyek
+    /* PAGINATION */
     public function countProyek() {
         $sql = "SELECT COUNT(*) AS total FROM proyek";
         $stmt = $this->conn->prepare($sql);
@@ -134,7 +131,6 @@ class ProyekModel {
         return $stmt->fetch(PDO::FETCH_ASSOC)['total'];
     }
 
-    // Ambil data dengan pagination
     public function getPaginatedProyek($limit, $offset) {
         $sql = "SELECT p.*, k.nama_klien, t.nama_tim, s.nama_status
                 FROM proyek p

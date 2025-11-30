@@ -1,5 +1,4 @@
 <?php
-
 class TugasModel {
     private $conn;
     private $table_name = "tugas";

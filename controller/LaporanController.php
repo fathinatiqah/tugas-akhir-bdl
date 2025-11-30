@@ -10,11 +10,18 @@ $viewModel = new ViewModel($db);
 $action = $_GET['action'] ?? 'read';
 
 switch($action) {
+
+    case "refresh":
+        $viewModel->refreshMV();
+        header("Location: LaporanController.php?action=read");
+        exit;
+
     case "read":
     default:
-        $proyekDetail = $viewModel->getProyekDetail();
+        $dataTugas = $viewModel->getDetailTugas();
+        $totalTugas   = $viewModel->getTotalTugas();
 
-        $page_content = "../views/halaman_view.php";
+        $page_content = "../views/laporan_view.php";
         include "../views/Layout.php";
         break;
 }

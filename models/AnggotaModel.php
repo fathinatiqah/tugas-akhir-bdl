@@ -1,14 +1,11 @@
 <?php 
-
 class AnggotaModel {
     private $conn;
     private $table_name = "anggota_tim";
 
-    // Constructor
     public function __construct($db) {
         $this->conn = $db;
     }
-
     // READ
     public function getAllAnggota() {
         $query = "SELECT * FROM $this->table_name ORDER BY \"id_anggota\" ASC";

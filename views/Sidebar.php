@@ -15,18 +15,13 @@
         </nav>
       </div>
       <div>
-        <nav>
-          <ul>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Help</a></li>
-          </ul>
-        </nav>
       </div>
     </aside>
 
     <header class="header">
       <div class="actions">
-        <button class="btn btn-primary" onclick="window.location.href='../controller/ViewController.php'">View</button>
+        <button class="btn btn-primary" onclick="window.location.href='../controller/ViewController.php'">Laporan Proyek</button>
+        <button class="btn btn-primary" onclick="window.location.href='../controller/LaporanController.php'">Laporan Penugasan</button>
         <button class="btn btn-secondary"onclick="window.location.href='../controller/TransactionController.php'">Transaction Demo</button>
     </header>
 

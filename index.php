@@ -295,6 +295,98 @@ body, html {
     overflow-y: auto;
 }
 
+/* Cards Grid Container */
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+/* Base Card Style */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 1.75rem;
+    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, #ff6b9d 0%, #ffc3a0 100%);
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.2);
+}
+
+/* Card Content */
+.card-title {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.75rem;
+}
+
+.card-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ff6b9d;
+    line-height: 1;
+}
+
+/* Small Cards (default) */
+.card.small {
+    min-height: 120px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Big Card untuk Budget */
+.card.big {
+    background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+    padding: 2rem;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.card.big::before {
+    display: none;
+}
+
+.card.big .card-title {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    margin-bottom: 1rem;
+}
+
+.card.big .card-value {
+    color: white;
+    font-size: 2.25rem;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.card.big .card-value.large {
+    font-size: 2.5rem;
+}
+
+
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
     .dashboard-container {
@@ -374,24 +466,19 @@ body, html {
         </nav>
       </div>
       <div>
-        <nav>
-          <ul>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Help</a></li>
-          </ul>
-        </nav>
       </div>
     </aside>
 
     <header class="header">
       <div class="actions">
-        <button class="btn btn-primary" onclick="window.location.href='controller/ViewController.php'">View</button>
-        <button class="btn btn-secondary" onclick="window.location.href='controller/TransactionController.php'">Transaction Demo</button>
+        <button class="btn btn-primary" onclick="window.location.href='controller/ViewController.php'">Laporan Proyek</button>
+        <button class="btn btn-primary" onclick="window.location.href='controller/LaporanController.php'">Laporan Penugasan</button>
+        <button class="btn btn-secondary"onclick="window.location.href='controller/TransactionController.php'">Transaction Demo</button>
     </header>
 
     <main class="main">
       <h1>Dashboard</h1>
-      <p>Selamat datang di dashboard manajemen proyek. Kamu bisa menampilkan ringkasan proyek, tugas, statistik, dan lainnya di bagian ini.</p>
+      <p>Selamat datang di dashboard manajemen proyek. Ini menampilkan ringkasan anggota, tim, klien, hingga proyek aktif, serta statistik keseluruhan jumlah budget proyek.</p>
       <?php
       // Pastikan variabel ada — kalau tidak, beri nilai default
       $totalAnggota     = $totalAnggota     ?? 0;
@@ -413,7 +500,7 @@ body, html {
     </div>
 
     <div class="card small">
-      <div class="card-title">Total Tim</div>
+      <div class="card-title">Total KLien</div>
       <div class="card-value"><?= htmlspecialchars($totalKlien) ?></div>
     </div>
 

@@ -38,15 +38,11 @@ class Overview {
         return (int) $stmt->fetchColumn();
     }
 
-    /**
-     * Hitung total budget dari semua proyek
-     * @return float — total budget (misalnya dalam decimal / integer)
-     */
     public function getTotalBudget(): float {
         $query = "SELECT SUM(budget) FROM {$this->table_proyek}";
         $stmt = $this->conn->prepare($query);
         $stmt->execute();
-        // fetchColumn akan mendapat nilai SUM(budget), bisa null jika tidak ada row
+
         $sum = $stmt->fetchColumn();
         return $sum !== null ? (float) $sum : 0.0;
     }

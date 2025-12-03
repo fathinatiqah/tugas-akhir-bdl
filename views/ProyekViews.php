@@ -134,6 +134,11 @@
   </tbody>
 </table>
 
+<?php
+// Pastikan $totalPages dan $page punya nilai default kalau belum di-set
+$totalPages = isset($totalPages) ? (int) $totalPages : 0;
+$page       = isset($page)       ? (int) $page       : 1;
+?>
 <!-- Pagination Proyek -->
 <?php if ($totalPages > 1): ?>
 <div style="margin-top:20px; text-align:center;">

@@ -65,7 +65,7 @@
   <input 
       type="text" 
       name="keyword" 
-      placeholder="Cari ID Proyek, Nama, Status" 
+      placeholder="Cari Nama Tugas dan Status" 
       style="padding: 7px; width: 300px;"
       value="<?= isset($_GET['keyword']) ? htmlspecialchars($_GET['keyword']) : '' ?>"
   >

@@ -7,7 +7,7 @@
         <form action="../controller/KlienController.php?action=create" method="POST">
             <input type="text" name="nama_klien" placeholder="Nama Klien" required>
             <input type="text" name="kontak_klien" placeholder="Kontak Klien" required>
-            <button type="submit">Simpan</button>
+            <button type="submit" onclick="return confirm('Yakin tambah data ini?')">Simpan</button>
         </form>
     </div>
 
@@ -65,7 +65,7 @@
             <input type="text" name="nama_klien" id="edit_nama_klien" required>
             <input type="text" name="kontak_klien" id="edit_kontak_klien" required>
 
-            <button type="submit">Update</button>
+            <button type="submit" onclick="return confirm('Yakin update data ini?')">Update</button>
         </form>
     </div>
 </div>
